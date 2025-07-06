@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+{% endblock %}
+
+{% block body %}
+    <!-- About Us Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="fade-in">About Us</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>Welcome to our company! We are a dedicated team of professionals committed to delivering exceptional service and innovative solutions to our clients.</p>
+                    <p>Founded in 2010, we have grown from a small startup to a recognized industry leader. Our mission is to transform the way businesses operate through cutting-edge technology and personalized approaches.</p>
+                    <p>What sets us apart is our unwavering commitment to quality, integrity, and customer satisfaction. We believe in building long-lasting relationships with our clients based on trust and mutual success.</p>
+                    <p>Our team consists of experienced professionals from diverse backgrounds, bringing a wealth of knowledge and creativity to every project we undertake.</p>
+                </div>
+                <div class="about-image fade-in">
+                    <img src="/api/placeholder/600/400" alt="Our Team">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="partners-section">
+        <div class="container">
+            <h2 class="fade-in">Our Partners</h2>
+            <p class="text-center fade-in">We collaborate with industry leaders to deliver the best solutions for our clients.</p>
+            <div class="partners-grid">
+                <div class="partner-card fade-in">
+                    <div class="partner-logo">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>TechCorp</h3>
+                    <p>Technology Solutions</p>
+                </div>
+                <div class="partner-card fade-in">
+                    <div class="partner-logo">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>GrowthFirm</h3>
+                    <p>Business Strategy</p>
+                </div>
+                <div class="partner-card fade-in">
+                    <div class="partner-logo">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>GlobalNet</h3>
+                    <p>International Services</p>
+                </div>
+                <div class="partner-card fade-in">
+                    <div class="partner-logo">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>InnovateLabs</h3>
+                    <p>Research & Development</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <h2 class="fade-in">Our Testimonials</h2>
+            <p class="text-center fade-in">Hear what our clients have to say about our services.</p>
+            
+            <div class="testimonials-slider fade-in">
+                <div class="testimonials-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            Working with this team has been an absolute pleasure. They understood our business needs perfectly and delivered a solution that exceeded our expectations. Their attention to detail and commitment to quality is unmatched.
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>John Smith</h4>
+                                <p>CEO, TechInnovate</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            The level of professionalism and expertise displayed by the entire team was impressive. They were responsive, creative, and most importantly, delivered on time and within budget. I highly recommend their services.
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Sarah Johnson</h4>
+                                <p>Marketing Director, GrowthCo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            We've been working with this company for over three years now, and they have consistently delivered outstanding results. Their team is not just skilled but also passionate about what they do, making them the perfect partner.
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Michael Brown</h4>
+                                <p>Operations Manager, GlobalSolutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ratings Section -->
+    <section id="ratings" class="ratings-section">
+        <div class="container">
+            <h2 class="fade-in">Our Ratings</h2>
+            <p class="text-center fade-in">Our commitment to excellence has earned us top ratings across the industry.</p>
+            
+            <div class="ratings-container">
+                <div class="rating-card fade-in">
+                    <div class="rating-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="rating-number" data-count="98">0</div>
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <h3>Customer Satisfaction</h3>
+                </div>
+                <div class="rating-card fade-in">
+                    <div class="rating-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="rating-number" data-count="25">0</div>
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Industry Awards</h3>
+                </div>
+                <div class="rating-card fade-in">
+                    <div class="rating-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="rating-number" data-count="350">0</div>
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <h3>Projects Completed</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="fade-in">Contact Us</h2>
+            <p class="text-center fade-in">Get in touch with us for any questions or inquiries.</p>
+            
+            <div class="contact-container">
+                <div class="contact-info fade-in">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Our Location</h4>
+                            <p>Golfutar-Kathmandu, Nepal</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Call Us</h4>
+                            <p>+1 234 567 8900</p>
+                            <p>+1 234 567 8901</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Email Us</h4>
+                            <p>info@yourcompany.com</p>
+                            <p>support@yourcompany.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Working Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                            <p>Saturday: 10:00 AM - 2:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </section>
+
+    {% endblock body %}
+
+    <!-- JavaScript -->
+    <script>
+        // Intersection Observer for fade-in animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Testimonials Slider
+            const track = document.querySelector('.testimonials-track');
+            const slides = document.querySelectorAll('.testimonial-card');
+            const nextBtn = document.querySelector('.next-btn');
+            const prevBtn = document.querySelector('.prev-btn');
+            let currentIndex = 0;
+            
+            function updateSlider() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+            
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateSlider();
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                updateSlider();
+            });
+            
+            // Auto-rotate testimonials
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                updateSlider();
+            }, 8000);
+
+            // Animate number counting for ratings
+            const ratingNumbers = document.querySelectorAll('.rating-number');
+            
+            ratingNumbers.forEach(number => {
+                const targetValue = parseInt(number.getAttribute('data-count'));
+                const duration = 2000; // 2 seconds
+                const step = targetValue / (duration / 16); // 60fps
+                let current = 0;
+                
+                const animate = () => {
+                    current += step;
+                    if (current < targetValue) {
+                        number.textContent = Math.round(current);
+                        requestAnimationFrame(animate);
+                    } else {
+                        number.textContent = targetValue;
+                    }
+                };
+                
+                const numObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animate();
+                            numObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                numObserver.observe(number);
+            });
+
+            // Form submission with animation
+            const contactForm = document.getElementById('contactForm');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    submitBtn.textContent = 'Message Sent!';
+                    submitBtn.style.background = '#28a745';
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.style.background = '#4285f4';
+                        submitBtn.disabled = false;
+                    }, 3000);
+                }, 1500);
+            });
+        });
+    </script>
+{% comment %} {% endblock %} {% endcomment %}

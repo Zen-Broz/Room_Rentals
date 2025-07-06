@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+          <title>
+              Room Rental System
+              {% block title %}
+              {% endblock title %}
+          </title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          <link rel="stylesheet" href=" {% static 'css/bootstrap.css' %} ">
+          <link rel="icon" href="{% static 'assets/logo1.png' %}" type="image/jpg">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+          <link rel="stylesheet" href="{% static 'css/sec.css' %}">
+          <link rel="stylesheet" href="{% static 'css/new.css' %}">
+          <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+          <script src = "{% static 'js/new.js' %}"></script>
+          <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+            {% block style %}
+            {% endblock style %}
+        {% endblock head %}
+    </head>
+    {% comment %} <style>
+        .navbar-nav a {
+            color: black !important;
+        }
+    </style> {% endcomment %}
+    <body>
+        <!-- Enhanced Navigation -->
+        {% block nav %}
+
+        <nav class="bg-white border-gray-200 dark:bg-gray-900">
+          <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="/index/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="{% static '/assets/logo1.png' %}" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Room Rental</span>
+            </a>
+            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+  <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+    
+    <li>
+      <a href="/index/" class="block py-2 px-3 rounded-sm md:p-0 
+         {% if request.path == '/index/' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+         {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+         Home
+      </a>
+    </li>
+    
+    <li>
+      <a href="/about/" class="block py-2 px-3 rounded-sm md:p-0 
+         {% if request.path == '/about/' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+         {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+         About
+      </a>
+    </li>
+    
+    <li>
+      <a href="/contact/" class="block py-2 px-3 rounded-sm md:p-0 
+         {% if request.path == '/contact/' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+         {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+         Contact
+      </a>
+    </li>
+
+    {% if request.user.is_authenticated %}
+      <li>
+        <a href="/profile/" class="block py-2 px-3 rounded-sm md:p-0 
+           {% if request.path == '/profile/' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+           {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+           Profile
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'logout' %}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+           Log Out
+        </a>
+      </li>
+    {% else %}
+      <li>
+        <a href="/login/" class="block py-2 px-3 rounded-sm md:p-0 
+           {% if request.path == '/login/' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+           {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+           Profile
+        </a>
+      </li>
+      <li>
+        <a href="/register" class="block py-2 px-3 rounded-sm md:p-0 
+           {% if request.path == '/register' %}text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500 
+           {% else %}text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 md:dark:hover:bg-transparent{% endif %}">
+           Log Out
+        </a>
+      </li>
+    {% endif %}
+    
+  </ul>
+</div>
+
+          </div>
+        </nav>
+
+        {% endblock nav %}
+
+        {% block content %}
+        {% endblock content %}
+
+        {% block main %}
+
+        {% endblock %}
+
+
+        <!-- Modal -->
+        <div id="id01" class="custom-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+            <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+        </div>
+
+        {%block body%}
+        {%endblock%}
+
+        {%block footer%}
+          <footer>
+            <div class="footer-container">
+              <div class="footer-main">
+                <div class="footer-brand">
+                  <h2>ROOM RENTALS</h2>
+                  <p>We help you find new rooms in the city that saves you from getting scammed.</p>
+                  <div class="social-media">
+                    <a href="#"><span>f</span></a>
+                    <a href="#"><span>t</span></a>
+                    <a href="#"><span>in</span></a>
+                    <a href="#"><span>ig</span></a>
+                  </div>
+                </div>
+                
+                <div class="footer-links">
+                  <h3 class="footer-heading">Quick Links</h3>
+                  <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Terms of Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                  </ul>
+                </div>
+                
+                <div class="footer-contact">
+                  <h3 class="footer-heading">Contact Us</h3>
+                  <p><i>📍</i> Golfutar-Kathmandu, Nepal</p>
+                  <p><i>📞</i> +977 9762322685</p>
+                  <p><i>✉️</i> roomrental@gmail.com </p>
+                </div>
+              </div>
+              
+              <div class="copyright">
+                <p>Copyright © 2025 | Designed With <span class="heart">❤️</span> By Our Team Tyler Durden</p>
+              </div>
+            </div>
+          </footer>
+        {%endblock%}
+    </body>
+    <script>
+      // Hamburger icon animation toggle
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggler = document.querySelector('.navbar-toggler');
+        const icon = document.querySelector('.animated-icon');
+
+        if (toggler && icon) {
+          toggler.addEventListener('click', () => {
+            icon.classList.toggle('open');
+          });
+        }
+      });
+    </script>
+
+</html>

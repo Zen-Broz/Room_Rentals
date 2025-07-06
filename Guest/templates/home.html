@@ -1,0 +1,730 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<style>
+    /* Preserve existing styles */
+    .row {
+        padding: 2em;
+    }
+
+    input[type=text] {
+        margin: unset!important;
+    }
+
+    button[type="submit"] {
+        border-radius: 0;
+    }
+    
+    /* Hero Section Styles */
+    .hero-section {
+        position: relative;
+        height: 85vh;
+        width: 100%;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        background-size: 600% 600%;
+        animation: gradientBG 15s ease infinite;
+    }
+    
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        text-align: center;
+        width: 90%;
+        max-width: 1200px;
+        perspective: 1000px;
+    }
+    
+    .hero-title {
+        font-size: 4.5rem;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        margin-bottom: 20px;
+        transform: translateZ(0);
+        opacity: 0;
+        animation: fadeInTitle 1.2s forwards 0.5s;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.8rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 40px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transform: translateZ(20px);
+        opacity: 0;
+        animation: fadeInSubtitle 1.2s forwards 0.8s;
+    }
+    
+    @keyframes fadeInTitle {
+        from { opacity: 0; transform: translateY(-30px) translateZ(0); }
+        to { opacity: 1; transform: translateY(0) translateZ(0); }
+    }
+    
+    @keyframes fadeInSubtitle {
+        from { opacity: 0; transform: translateY(30px) translateZ(20px); }
+        to { opacity: 1; transform: translateY(0) translateZ(20px); }
+    }
+    
+    .search-box-3d {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        transform: rotateX(5deg) translateZ(50px);
+        transition: all 0.5s ease;
+        opacity: 0;
+        animation: fadeInSearch 1.2s forwards 1.1s;
+    }
+    
+    @keyframes fadeInSearch {
+        from { opacity: 0; transform: rotateX(25deg) translateZ(50px); }
+        to { opacity: 1; transform: rotateX(5deg) translateZ(50px); }
+    }
+    
+    .search-box-3d:hover {
+        transform: rotateX(0) translateZ(60px);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    }
+    
+    .search-box-3d input,
+    .search-box-3d select {
+        height: 50px;
+        border-radius: 8px;
+        border: none;
+        padding: 0 15px;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box-3d input:focus,
+    .search-box-3d select:focus {
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(66, 153, 225, 0.5);
+    }
+    
+    .search-box-3d button {
+        height: 50px;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .search-box-3d button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(110, 142, 251, 0.6);
+    }
+    
+    .floating-buildings {
+        position: absolute;
+        bottom: -100px;
+        width: 100%;
+        height: 250px;
+        background: url('{% static "img/city-silhouette.png" %}') repeat-x;
+        background-size: 1000px 250px;
+        opacity: 0.7;
+        animation: floatingBuildings 60s linear infinite;
+    }
+    
+    @keyframes floatingBuildings {
+        from { background-position-x: 0; }
+        to { background-position-x: 1000px; }
+    }
+    
+    .parallax-circles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(1px);
+        animation: float 10s infinite ease-in-out;
+    }
+    
+    .circle:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: -150px;
+        right: 10%;
+        animation-delay: 0s;
+    }
+    
+    .circle:nth-child(2) {
+        width: 200px;
+        height: 200px;
+        bottom: 5%;
+        left: 10%;
+        animation-delay: 2s;
+    }
+    
+    .circle:nth-child(3) {
+        width: 150px;
+        height: 150px;
+        top: 40%;
+        left: 5%;
+        animation-delay: 1s;
+    }
+    
+    .circle:nth-child(4) {
+        width: 80px;
+        height: 80px;
+        bottom: 10%;
+        right: 20%;
+        animation-delay: 3s;
+    }
+    
+    .circle:nth-child(5) {
+        width: 120px;
+        height: 120px;
+        top: 30%;
+        right: 8%;
+        animation-delay: 0.5s;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    .scroll-indicator {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+        opacity: 0;
+        animation: fadeIn 1s forwards 2s;
+    }
+    
+    .scroll-indicator p {
+        margin-bottom: 10px;
+        font-size: 1rem;
+        font-weight: 300;
+    }
+    
+    .scroll-arrow {
+        width: 30px;
+        height: 30px;
+        border: 2px solid white;
+        border-radius: 50%;
+        position: relative;
+        animation: bounce 2s infinite;
+    }
+    
+    .scroll-arrow:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid white;
+        border-bottom: 2px solid white;
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* New Property Card Styles */
+    .property-carousel {
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .property-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        height: 100%;
+        border: none;
+        margin-bottom: 1.5rem;
+    }
+
+    .property-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .property-card .card-img-wrapper {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+    }
+
+    .property-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+
+    .property-card:hover img {
+        transform: scale(1.08);
+    }
+
+    .property-card .property-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 8px 15px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        z-index: 2;
+    }
+
+    .property-card .badge-available {
+        background: linear-gradient(135deg, #4caf50, #8bc34a);
+        color: white;
+    }
+
+    .property-card .badge-booked {
+        background: linear-gradient(135deg, #f44336, #ff9800);
+        color: white;
+    }
+
+    .property-card .card-body {
+        padding: 1.5rem;
+        background: white;
+    }
+
+    .property-card .property-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .property-card .property-address {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .property-card .property-address .location-icon {
+        margin-right: 8px;
+        color: #999;
+        width: 16px;
+        height: 16px;
+    }
+
+    .property-card .property-desc {
+        margin: 0.8rem 0;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    .property-card .view-button {
+        display: inline-block;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white;
+        border-radius: 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        width: 100%;
+        text-align: center;
+    }
+
+    .property-card .view-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(110, 142, 251, 0.6);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Results section styling */
+    .results-section {
+        background: #f8f9fa;
+        min-height: 50vh;
+        padding: 3rem 0;
+    }
+
+    .results-title {
+        text-align: center;
+        margin-bottom: 3rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+    }
+
+    .no-results h3 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .no-results p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .pagination-wrapper {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 2rem 0;
+    }
+
+    .pagination-wrapper a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .pagination-wrapper a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(110, 142, 251, 0.6);
+        color: white;
+        text-decoration: none;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+        .hero-title {
+            font-size: 3.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+        }
+        
+        .search-box-3d {
+            padding: 20px;
+        }
+
+        .results-title {
+            font-size: 2rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.8rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .hero-section {
+            height: 75vh;
+        }
+        
+        .search-box-3d {
+            transform: none !important;
+            animation: fadeIn 1.2s forwards 1.1s;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+        }
+
+        .property-card .property-price {
+            font-size: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-section {
+            height: 65vh;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+        }
+
+        .property-card .card-body {
+            padding: 1rem;
+        }
+
+        .property-card .property-price {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="parallax-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    
+    <div class="hero-content">
+        <h1 class="hero-title">Find Your Perfect Home</h1>
+        <p class="hero-subtitle">Discover the best rental properties in your area</p>
+        
+        <div class="search-box-3d">
+            <form class="form-inline" style="width: 100%;" method="GET" action="/search">
+                <div class="row" style="width: 100%; margin: 0;">
+                    <div class="col-md-5 col-sm-12 mb-2">
+                        <input type="text" class="form-control w-100" name="q" placeholder="Where do you want to live?" {% if q %}value="{{q}}"{% endif %} />
+                    </div>
+                    <div class="col-md-4 col-sm-12 mb-2">
+                        <select name="type" class="form-control w-100">
+                            <option value="House">House</option>
+                            <option value="Apartment">Apartment</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <button class="btn w-100" type="submit">
+                            <i class="fa fa-search mr-2"></i> Find Homes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="floating-buildings"></div>
+    
+    <div class="scroll-indicator">
+        <p>Scroll to explore</p>
+        <div class="scroll-arrow"></div>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="results-section">
+    <div class="container">
+        {% if result.0 %}
+            <h2 class="results-title">Available Properties</h2>
+            
+            <div class="property-carousel">
+                <div class="row">
+                    {% for i in result.0 %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="property-card">
+                            <div class="card-img-wrapper">
+                                <img src='{{i.img.url}}' alt="Property Image">
+                                <div class="property-badge badge-available">Available</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="property-price">NPR {{i.cost}}</div>
+                                <div class="property-address">
+                                    <svg class="location-icon" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{i.location}}, {{i.city}}, {{i.state}}
+                                </div>
+                                <div class="property-desc">{{i.desc|slice:"0:80"}}...</div>
+                                
+                                {% if type == 'House' %}
+                                <form action="/descr" method="GET">
+                                    <button name="id" value="{{i.house_id}}" class="view-button" type="submit">
+                                        Quick View
+                                    </button>
+                                </form>
+                                {% else %}
+                                <form action="/descr" method="GET">
+                                    <button name="id" value="{{i.room_id}}" class="view-button" type="submit">
+                                        Quick View
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="pagination-wrapper">
+                    <a href="#">Page 1 of {{result.1}}</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-results">
+                <h3>No Properties Found</h3>
+                <p>Try adjusting your search criteria or browse all available properties.</p>
+                <a href="/" class="view-button" style="display: inline-block; width: auto;">
+                    Start New Search
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add JavaScript for 3D parallax effect -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 3D effect on mouse move
+    const heroContent = document.querySelector('.hero-content');
+    const heroSection = document.querySelector('.hero-section');
+    const searchBox = document.querySelector('.search-box-3d');
+    const title = document.querySelector('.hero-title');
+    const subtitle = document.querySelector('.hero-subtitle');
+    const circles = document.querySelectorAll('.circle');
+    
+    // Only apply these effects on larger screens
+    if (window.innerWidth > 768) {
+        heroSection.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            // Apply transform to the search box for 3D effect
+            searchBox.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg) translateZ(50px)`;
+            
+            // Subtle parallax effect on title and subtitle
+            title.style.transform = `translateX(${-xAxis/2}px) translateY(${-yAxis/2}px)`;
+            subtitle.style.transform = `translateX(${-xAxis/3}px) translateY(${-yAxis/3}px) translateZ(20px)`;
+            
+            // Move circles for parallax effect
+            circles.forEach((circle, index) => {
+                const speed = (index + 1) / 5;
+                circle.style.transform = `translateX(${-xAxis * speed}px) translateY(${-yAxis * speed}px)`;
+            });
+        });
+        
+        // Reset on mouse leave
+        heroSection.addEventListener('mouseleave', () => {
+            searchBox.style.transform = `rotateX(5deg) translateZ(50px)`;
+            title.style.transform = 'translateY(0) translateZ(0)';
+            subtitle.style.transform = 'translateY(0) translateZ(20px)';
+            
+            circles.forEach(circle => {
+                circle.style.transform = 'translateX(0) translateY(0)';
+            });
+        });
+    }
+    
+    // Scroll indicator functionality
+    document.querySelector('.scroll-arrow').addEventListener('click', () => {
+        window.scrollTo({
+            top: heroSection.offsetHeight,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Add city silhouette image fallback
+    const floatingBuildings = document.querySelector('.floating-buildings');
+    floatingBuildings.style.backgroundImage = "url('https://i.imgur.com/8eErQ9M.png')";
+    
+    // Add smooth reveal animations on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    // Observe property cards
+    const propertyCards = document.querySelectorAll('.property-card');
+    propertyCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.transform = 'translateY(30px)';
+        card.style.animationDelay = `${index * 0.1}s`;
+        observer.observe(card);
+    });
+    
+    // Add visible class style
+    const style = document.createElement('style');
+    style.textContent = `
+        .visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Enhanced form animations
+    const formInputs = document.querySelectorAll('.search-box-3d input, .search-box-3d select');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.style.transform = 'scale(1.03)';
+            input.style.boxShadow = '0 0 0 3px rgba(66, 153, 225, 0.5)';
+        });
+        
+        input.addEventListener('blur', () => {
+            input.style.transform = 'scale(1)';
+            input.style.boxShadow = 'inset 0 2px 5px rgba(0, 0, 0, 0.1)';
+        });
+    });
+});
+</script>
+{% endblock %}

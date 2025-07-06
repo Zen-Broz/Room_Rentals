@@ -1,0 +1,251 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block button %}
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <a class="btn btn-success navbar-signup-btn-sm" href="/register"><strong>Sign Up</strong></a>
+{% endblock %}
+
+{% block body %}
+<div class="login-page-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Log In to Your Account</h2>
+            <p class="login-subtitle">Welcome back! Please enter your details</p>
+        </div>
+        
+        <form class="login-form" action="/login/" method="post">
+            {% csrf_token %}
+            
+            {% if msg %}
+                <div class="login-error-message">
+                    {{ msg }}
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-with-icon">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-with-icon">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+            
+            <div class="form-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember" checked>
+                    <label for="remember">Remember me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="{% url 'passwordresetrequest' %}">Forgot password?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-button">Log In</button>
+            
+            <div class="signup-prompt">
+                Don't have an account? <a href="/register">Sign up</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+
+    /* Login Page Styles */
+    .login-page-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 180px); /* Adjust based on your header/footer height */
+        padding: 40px 20px;
+        padding-top: 120px;
+        background-color: #f8f9fa;
+    }
+    
+    .login-card {
+        width: 100%;
+        max-width: 460px;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    
+    .login-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212b36;
+        margin-bottom: 8px;
+    }
+    
+    .login-subtitle {
+        color: #637381;
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+    
+    .login-error-message {
+        background-color: #ffe9e9;
+        color: #d32f2f;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+    
+    .form-group {
+        margin-bottom: 24px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #212b36;
+        font-size: 14px;
+    }
+    
+    .input-with-icon {
+        position: relative;
+    }
+    
+    .input-with-icon i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #637381;
+    }
+    
+    .input-with-icon input {
+        width: 86%;
+        padding: 14px 16px 14px 46px;
+        border: 1px solid #dfe3e8;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.2s;
+    }
+    
+    .input-with-icon input:focus {
+        border-color:rgb(103, 129, 244);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    }
+    
+    .input-with-icon input::placeholder {
+        color: #919eab;
+    }
+    
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+    
+    .remember-me {
+        display: flex;
+        align-items: center;
+    }
+    
+    .remember-me input {
+        margin-right: 8px;
+    }
+    
+    .remember-me label {
+        font-size: 14px;
+        color: #637381;
+    }
+    
+    .forgot-password a {
+        font-size: 14px;
+        color: rgb(103, 129, 244);
+        text-decoration: none;
+    }
+    
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+    
+    .login-button {
+        width: 100%;
+        padding: 14px;
+        background-color: rgb(103, 129, 244);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .login-button:hover {
+        background-color:rgb(103, 129, 244);
+    }
+    
+    .signup-prompt {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 14px;
+        color: #637381;
+    }
+    
+    .signup-prompt a {
+        color:rgb(103, 129, 244);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .signup-prompt a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Fix for message container to avoid layout shifts */
+    .messages-container {
+        margin-bottom: 16px;
+    }
+    
+    /* Media Queries */
+    @media (max-width: 576px) {
+        .login-card {
+            padding: 30px 20px;
+        }
+        
+        .login-header h2 {
+            font-size: 24px;
+        }
+        
+        .form-options {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .forgot-password {
+            margin-top: 12px;
+        }
+    }
+</style>
+{% endblock %}

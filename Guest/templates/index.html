@@ -1,0 +1,1364 @@
+<!-- Modified Property Cards and Carousel Section -->
+{% extends 'base.html' %} {% load static %} {% block style %}
+<!-- CSS Additions - Add this to your existing style block -->
+<style>
+  /* Modern Property Cards Styling */
+  .property-carousel {
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .property-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    height: 100%;
+    border: none;
+  }
+
+  .property-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .property-card .card-img-wrapper {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+  }
+
+  .property-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+
+  .property-card:hover img {
+    transform: scale(1.08);
+  }
+
+  .property-card .property-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+
+  .property-card .badge-available {
+    background: linear-gradient(135deg, #4caf50, #8bc34a);
+    color: white;
+  }
+
+  .property-card .badge-booked {
+    background: linear-gradient(135deg, #f44336, #ff9800);
+    color: white;
+  }
+
+  .property-card .card-body {
+    padding: 1.5rem;
+    background: white;
+  }
+
+  .property-card .property-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .property-card .property-address {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .property-card .property-address svg {
+    margin-right: 5px;
+    color: #999;
+  }
+
+  .property-card .property-desc {
+    margin: 0.8rem 0;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .property-card .view-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+    width: 100%;
+    text-align: center;
+  }
+
+  .property-card .view-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(110, 142, 251, 0.6);
+  }
+
+  /* Section Headers */
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.8rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-header h2:after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+
+  .section-header p {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+  }
+
+  /* Card Grid Layout */
+  .property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 2rem;
+  }
+
+  /* Pagination Styling */
+  .custom-pagination {
+    margin-top: 2rem;
+  }
+
+  .custom-pagination .pagination {
+    display: flex;
+    justify-content: center;
+  }
+
+  .custom-pagination .page-item .page-link {
+    padding: 10px 18px;
+    border-radius: 50%;
+    margin: 0 5px;
+    color: #333;
+    font-weight: 600;
+    border: none;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+  }
+
+  .custom-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+  }
+
+  .custom-pagination .page-item .page-link:hover:not(.active) {
+    background-color: #e9ecef;
+    transform: translateY(-3px);
+  }
+
+  .custom-pagination .page-item .page-link span {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 992px) {
+    .property-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .property-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
+
+    .section-header h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  /* Core Hero Section Styles */
+  .w3-home-container {
+    margin-top: 1%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 1%;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .w3-home-container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+  /* Enhanced Hero Section with Advanced 3D Effects */
+  .hero-wrapper {
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    overflow: hidden;
+    perspective: 1500px;
+    background: linear-gradient(135deg, #0a192f, #112240);
+    z-index: 1;
+  }
+
+  .hero-inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    transform-style: preserve-3d;
+  }
+
+  /* Advanced parallax background effect */
+  .parallax-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+  }
+
+  .parallax-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    opacity: 0.5;
+  }
+
+  .layer-1 {
+    background: radial-gradient(
+        circle at 20% 80%,
+        rgba(41, 82, 149, 0.3),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(99, 57, 144, 0.3),
+        transparent 40%
+      );
+    transform: translateZ(-400px) scale(1.4);
+  }
+
+  .layer-2 {
+    background: radial-gradient(
+        circle at 70% 90%,
+        rgba(66, 134, 244, 0.2),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 30% 10%,
+        rgba(145, 85, 253, 0.2),
+        transparent 30%
+      );
+    transform: translateZ(-300px) scale(1.3);
+  }
+
+  .layer-3 {
+    background: radial-gradient(
+        circle at 10% 30%,
+        rgba(66, 211, 244, 0.15),
+        transparent 20%
+      ),
+      radial-gradient(
+        circle at 90% 70%,
+        rgba(253, 85, 170, 0.15),
+        transparent 20%
+      );
+    transform: translateZ(-200px) scale(1.2);
+  }
+
+  /* Enhanced Hero Content */
+  .hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(50px);
+    z-index: 10;
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .hero-title {
+    font-family: "Poppins", sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(30px) translateZ(0px);
+    animation: fadeUp 1s forwards 0.3s;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #ffffff 30%, #bbc9ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(30px) translateZ(0px);
+    animation: fadeUp 1s forwards 0.6s;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px) translateZ(0px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(0px);
+    }
+  }
+
+  /* Enhanced 3D Search Container */
+  .search-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: translateY(30px) rotateX(20deg);
+    animation: containerReveal 1s forwards 0.9s;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+  }
+
+  @keyframes containerReveal {
+    from {
+      opacity: 0;
+      transform: translateY(30px) rotateX(20deg);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) rotateX(8deg);
+    }
+  }
+
+  .search-container:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35),
+      0 0 0 2px rgba(255, 255, 255, 0.15);
+  }
+
+  .search-container:before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    border-radius: 24px;
+    z-index: -1;
+    animation: gradientRotate 10s linear infinite;
+  }
+
+  @keyframes gradientRotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .search-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .search-input {
+    flex: 1 1 300px;
+    min-width: 0;
+    position: relative;
+  }
+
+  .search-select {
+    flex: 1 1 220px;
+    min-width: 0;
+    position: relative;
+  }
+
+  .search-button {
+    flex: 1 1 180px;
+    min-width: 180px;
+  }
+
+  .search-input input,
+  .search-select select {
+    width: 100%;
+    padding: 18px 24px;
+    border-radius: 16px;
+    border: none;
+    font-size: 1.05rem;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05),
+      0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+  }
+
+  .search-input input:focus,
+  .search-select select:focus {
+    outline: none;
+    transform: translateY(-3px);
+    box-shadow: 0 0 0 3px rgba(105, 155, 255, 0.5),
+      inset 0 2px 5px rgba(0, 0, 0, 0.05), 0 15px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .search-input:before,
+  .search-select:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    z-index: 2;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .search-input:hover:before,
+  .search-select:hover:before {
+    opacity: 1;
+  }
+
+  .search-button button {
+    width: 100%;
+    padding: 18px 24px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(110, 142, 251, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .search-button button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.7s ease;
+  }
+
+  .search-button button:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(110, 142, 251, 0.7);
+  }
+
+  .search-button button:hover:before {
+    left: 100%;
+  }
+
+  .search-button button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* 3D Floating City Elements */
+  .floating-building {
+    position: absolute;
+    bottom: -50px;
+    width: 120%;
+    left: -10%;
+    height: 280px;
+    background-image: url("https://i.imgur.com/JGUVXiP.png");
+    background-repeat: repeat-x;
+    background-size: 1200px 280px;
+    opacity: 0.7;
+    z-index: 1;
+    transform: translateZ(-100px) rotateX(20deg);
+    animation: floatBuildings 120s linear infinite;
+    filter: drop-shadow(0 -10px 20px rgba(0, 0, 0, 0.3));
+  }
+
+  @keyframes floatBuildings {
+    from {
+      background-position-x: 0;
+    }
+
+    to {
+      background-position-x: 1200px;
+    }
+  }
+
+  /* Enhanced Animated Shapes */
+  .animated-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    z-index: 1;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1),
+      0 0 30px rgba(255, 255, 255, 0.05);
+    transform-style: preserve-3d;
+  }
+
+  .shape1 {
+    width: 400px;
+    height: 400px;
+    top: -150px;
+    right: 5%;
+    animation: float 20s ease-in-out infinite, rotate3D 30s linear infinite;
+  }
+
+  .shape2 {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    left: 0;
+    animation: float 15s ease-in-out infinite 1s,
+      rotate3D-alt 25s linear infinite;
+  }
+
+  .shape3 {
+    width: 200px;
+    height: 200px;
+    top: 30%;
+    left: 10%;
+    animation: float 25s ease-in-out infinite 2s, rotate3D 35s linear infinite;
+  }
+
+  .shape4 {
+    width: 150px;
+    height: 150px;
+    bottom: 20%;
+    right: 15%;
+    animation: float 18s ease-in-out infinite 1.5s,
+      rotate3D-alt 20s linear infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) translateZ(50px) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-30px) translateZ(100px) rotate(5deg);
+    }
+  }
+
+  @keyframes rotate3D {
+    0% {
+      transform: translateZ(50px) rotateX(0deg) rotateY(0deg);
+    }
+
+    50% {
+      transform: translateZ(100px) rotateX(10deg) rotateY(180deg);
+    }
+
+    100% {
+      transform: translateZ(50px) rotateX(0deg) rotateY(360deg);
+    }
+  }
+
+  @keyframes rotate3D-alt {
+    0% {
+      transform: translateZ(70px) rotateX(0deg) rotateY(0deg);
+    }
+
+    50% {
+      transform: translateZ(120px) rotateX(-10deg) rotateY(-180deg);
+    }
+
+    100% {
+      transform: translateZ(70px) rotateX(0deg) rotateY(-360deg);
+    }
+  }
+
+  /* Enhanced 3D Particles System */
+  .particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    transform-style: preserve-3d;
+  }
+
+  .particle {
+    position: absolute;
+    display: block;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    pointer-events: none;
+    transform-style: preserve-3d;
+  }
+
+  /* Enhanced scroll indicator with 3D effect */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateZ(30px);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards 2s;
+  }
+
+  .scroll-indicator p {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .scroll-arrow {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: bounce 2.5s infinite, glowing 5s infinite alternate;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .scroll-arrow:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(110, 142, 251, 0.4),
+      rgba(167, 119, 227, 0.4)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+  }
+
+  .scroll-arrow:hover:before {
+    opacity: 1;
+  }
+
+  .scroll-arrow:after {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(45deg) translateY(-3px);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+
+    40% {
+      transform: translateY(-15px);
+    }
+
+    60% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes glowing {
+    0% {
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    100% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px) translateZ(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) translateZ(30px);
+    }
+  }
+
+  /* Enhanced Property Category Pills */
+  .property-types {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 35px;
+    opacity: 0;
+    animation: fadeIn 1s forwards 1.3s;
+    transform-style: preserve-3d;
+    flex-wrap: wrap;
+  }
+
+  .property-pill {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(20px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .property-pill:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0)
+    );
+    border-radius: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .property-pill:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px) translateZ(30px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .property-pill:hover:before {
+    opacity: 1;
+  }
+
+  .property-pill.active {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    box-shadow: 0 10px 25px rgba(110, 142, 251, 0.5);
+  }
+
+  .property-pill.active:hover {
+    transform: translateY(-5px) translateZ(40px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(110, 142, 251, 0.7);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .hero-title {
+      font-size: 4rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+    }
+
+    .search-container {
+      padding: 25px;
+    }
+
+    .shape1 {
+      width: 300px;
+      height: 300px;
+    }
+
+    .shape2 {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 3rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+
+    .search-container {
+      transform: none !important;
+      padding: 20px;
+    }
+
+    .search-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .search-input input,
+    .search-select select,
+    .search-button button {
+      padding: 15px 20px;
+    }
+
+    .search-input,
+    .search-select,
+    .search-button {
+      width: 100%;
+      flex: none;
+    }
+
+    .hero-wrapper {
+      height: 85vh;
+    }
+
+    .property-types {
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .property-pill {
+      padding: 10px 18px;
+      font-size: 0.9rem;
+    }
+
+    .animated-shape {
+      opacity: 0.5;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .hero-title {
+      font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-wrapper {
+      height: 80vh;
+    }
+
+    .search-container {
+      padding: 15px;
+      border-radius: 16px;
+    }
+
+    .scroll-indicator {
+      bottom: 20px;
+    }
+  }
+</style>
+{% endblock %}
+{%block body%}
+<!-- Enhanced 3D Hero Section -->
+<div class="hero-wrapper" id="heroSection">
+  <div class="hero-inner">
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg" id="parallaxBg">
+      <div class="parallax-layer layer-1"></div>
+      <div class="parallax-layer layer-2"></div>
+      <div class="parallax-layer layer-3"></div>
+    </div>
+
+    <!-- Enhanced Animated Shapes -->
+    <div class="animated-shape shape1"></div>
+    <div class="animated-shape shape2"></div>
+    <div class="animated-shape shape4"></div>
+
+    <!-- Enhanced Floating Building Silhouette -->
+    <div class="floating-building"></div>
+
+    <!-- Enhanced Particles Container -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Enhanced Hero Content -->
+    <div class="hero-content">
+      <h1 class="hero-title">Find Your Perfect Home</h1>
+      <p class="hero-subtitle">
+        Discover the best rental properties in your preferred location
+      </p>
+
+      <!-- Enhanced Search Form -->
+      <div class="search-container" id="searchBox">
+        <form method="GET" action="/search">
+          <div class="search-row">
+            <div class="search-input">
+              <input
+                type="text"
+                name="q"
+                placeholder="Where do you want to live?"
+                {%
+                if
+                q
+                %}value="{{q}}"
+                {%
+                endif
+                %}
+              />
+            </div>
+            <div class="search-select">
+              <select name="type">
+                <option value="House">House</option>
+                <option value="Apartment">Apartment</option>
+              </select>
+            </div>
+            <div class="search-button">
+              <button type="submit">Find Homes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Enhanced Property Categories -->
+      <div class="property-types">
+        <div class="property-pill active">All Properties</div>
+        <div class="property-pill">Houses</div>
+        <div class="property-pill">Apartments</div>
+        <div class="property-pill">New Listings</div>
+      </div>
+    </div>
+
+    <!-- Enhanced Scroll Indicator -->
+    <div class="scroll-indicator">
+      <p>Scroll to explore</p>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Your original content below this point -->
+
+<!-- Advanced 3D Effect and Animation Scripts -->
+
+<!-- REPLACE the existing room section with this -->
+{% if room %}
+<div class="property-carousel">
+  <div class="w3-container w3-home-container">
+    <div class="section-header">
+      <h2>Explore Apartments</h2>
+      <p>Find comfortable and stylish apartments in your preferred locations</p>
+    </div>
+
+    <div class="property-grid">
+      {% for i in room %}
+      <div class="property-card">
+        <div class="card-img-wrapper">
+          <img src="{{i.img.url}}" alt="Apartment Image" />
+          {% if i.booked %}
+          <span class="property-badge badge-booked">Booked</span>
+          {% else %}
+          <span class="property-badge badge-available">Available</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <h3 class="property-price">NPR {{i.cost}}</h3>
+          <p class="property-desc">
+            {{i.desc|slice:"0:75"}}{% if i.desc|length > 75 %}...{% endif %}
+          </p>
+          <div class="property-address">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+              />
+            </svg>
+            {{i.district}}, {{i.city}}, {{i.state}}
+          </div>
+          <form action="/descr">
+            <button name="id" value="{{i.room_id}}" class="view-button">
+              View Details
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination for rooms -->
+    <div class="custom-pagination">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if room.has_previous %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?rooms_page={{ room.previous_page_number }}"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %} {% for num in room.paginator.page_range %}
+          <li class="page-item {% if room.number == num %}active{% endif %}">
+            <a class="page-link" href="?rooms_page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %} {% if room.has_next %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?rooms_page={{ room.next_page_number }}"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- REPLACE the existing house section with this -->
+{% if house %}
+<div class="property-carousel">
+  <div class="w3-container w3-home-container">
+    <div class="section-header">
+      <h2>Houses - Recommended for You</h2>
+      <p>Discover beautiful houses that match your preferences and lifestyle</p>
+    </div>
+
+    <div class="property-grid">
+      {% for i in house %}
+      <div class="property-card">
+        <div class="card-img-wrapper">
+          <img src="
+          {% if i.img %}
+          {{i.img.url}}
+          {% else %}
+          #
+          {% endif %}
+          "
+          alt="House Image" />
+          {% if i.booked %}
+          <span class="property-badge badge-booked">Booked</span>
+          {% else %}
+          <span class="property-badge badge-available">Available</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <h3 class="property-price">NPR {{i.cost}}</h3>
+          <p class="property-desc">
+            {{i.desc|slice:"0:75"}}{% if i.desc|length > 75 %}...{% endif %}
+          </p>
+          <div class="property-address">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+              />
+            </svg>
+            {{i.district}}, {{i.city}}, {{i.state}}
+          </div>
+          <form action="/descr">
+            <button name="id" value="{{i.house_id}}" class="view-button">
+              View Details
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination for houses -->
+    <div class="custom-pagination">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if house.has_previous %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?houses_page={{ house.previous_page_number }}"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %} {% for num in house.paginator.page_range %}
+          <li class="page-item {% if house.number == num %}active{% endif %}">
+            <a class="page-link" href="?houses_page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %} {% if house.has_next %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="?houses_page={{ house.next_page_number }}"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Add at the end of your file before the closing body tag to enhance card interactions -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add hover interaction for property cards
+    const propertyCards = document.querySelectorAll(".property-card");
+
+    propertyCards.forEach((card) => {
+      card.addEventListener("mouseenter", function () {
+        const button = this.querySelector(".view-button");
+        if (button) {
+          button.style.transform = "translateY(-3px)";
+          button.style.boxShadow = "0 8px 25px rgba(110, 142, 251, 0.6)";
+        }
+      });
+
+      card.addEventListener("mouseleave", function () {
+        const button = this.querySelector(".view-button");
+        if (button) {
+          button.style.transform = "";
+          button.style.boxShadow = "";
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Create enhanced particles
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = window.innerWidth > 768 ? 80 : 40;
+
+      for (let i = 0; i <s particleCount; i++) {
+          const size = Math.random() * 6 + 1;
+          const particle = document.createElement('span');
+          particle.classList.add('particle');
+
+          // Set particle properties
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.top = `${Math.random() * 100}%`;
+          particle.style.opacity = Math.random() * 0.5 + 0.1;
+
+          // Set 3D position
+          const zPosition = Math.random() * 300 - 150;
+          particle.style.transform = `translateZ(${zPosition}px)`;
+
+          // Set animation
+          const duration = Math.random() * 30 + 15;
+          const delay = Math.random() * 5;
+          particle.style.animation = `float ${duration}s infinite ease-in-out ${delay}s`;
+
+          particlesContainer.appendChild(particle);
+      }
+
+      // Enhanced 3D parallax effect on mousemove
+      const heroSection = document.getElementById('heroSection');
+      const searchBox = document.getElementById('searchBox');
+      const heroContent = document.querySelector('.hero-content');
+      const shapes = document.querySelectorAll('.animated-shape');
+      const parallaxLayers = document.querySelectorAll('.parallax-layer');
+      const floatingBuilding = document.querySelector('.floating-building');
+
+      heroSection.addEventListener('mousemove', (e) => {
+          const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+          const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+
+          // Apply effect to search box with enhanced depth
+          searchBox.style.transform = `translateY(0) translateZ(50px) rotateX(${-yAxis}deg) rotateY(${xAxis}deg)`;
+
+          // Apply effect to content
+          heroContent.style.transform = `translate(-50%, -50%) translateZ(50px) rotateX(${-yAxis * 0.2}deg) rotateY(${xAxis * 0.2}deg)`;
+
+          // Apply effect to shapes with different depths
+          shapes.forEach((shape, index) => {
+              const factor = (index + 1) / 8;
+              shape.style.transform = `translateX(${-xAxis * factor}px) translateY(${-yAxis * factor}px) translateZ(${50 + index * 30}px) rotateX(${-yAxis * 0.3}deg) rotateY(${xAxis * 0.3}deg)`;
+          });
+
+          // Apply effect to parallax layers
+          parallaxLayers.forEach((layer, index) => {
+              const factor = (index + 1) * 0.2;
+              layer.style.transform = `translateX(${xAxis * factor}px) translateY(${yAxis * factor}px) translateZ(-${(3-index) * 150}px) scale(${1.2 + (0.1 * (3-index))})`;
+          });
+
+          // Apply effect to floating building
+          floatingBuilding.style.transform = `translateX(${xAxis * 0.5}px) translateZ(-100px) rotateX(${20 + yAxis * 0.1}deg)`;
+      });
+
+      // Reset on mouseleave
+      heroSection.addEventListener('mouseleave', () => {
+          searchBox.style.transform = 'translateY(0) translateZ(50px) rotateX(8deg) rotateY(0)';
+          heroContent.style.transform = 'translate(-50%, -50%) translateZ(50px)';
+
+          shapes.forEach((shape, index) => {
+              shape.style.transform = '';
+          });
+
+          parallaxLayers.forEach((layer, index) => {
+              const baseZ = -((3-index) * 150);
+              layer.style.transform = `translateZ(${baseZ}px) scale(${1.2 + (0.1 * (3-index))})`;
+          });
+
+          floatingBuilding.style.transform = 'translateZ(-100px) rotateX(20deg)';
+      });
+
+      // Enhanced scroll indicator functionality with smooth animation
+      const scrollArrow = document.querySelector('.scroll-arrow');
+      scrollArrow.addEventListener('click', () => {
+          const heroHeight = document.querySelector('.hero-wrapper').offsetHeight;
+
+          window.scrollTo({
+              top: heroHeight,
+              behavior: 'smooth'
+          });
+      });
+
+      // Enhanced property pills interaction with 3D effect
+      const propertyPills = document.querySelectorAll('.property-pill');
+
+      propertyPills.forEach(pill => {
+          pill.addEventListener('mouseenter', function() {
+              if (!this.classList.contains('active')) {
+                  this.style.transform = 'translateY(-8px) translateZ(40px) scale(1.05)';
+              } else {
+                  this.style.transform = 'translateY(-8px) translateZ(50px) scale(1.05)';
+              }
+          });
+
+          pill.addEventListener('mouseleave', function() {
+              if (!this.classList.contains('active')) {
+                  this.style.transform = 'translateZ(20px)';
+              } else {
+                  this.style.transform = 'translateZ(30px)';
+              }
+          });
+
+          pill.addEventListener('click', () => {
+              // Remove active class from all pills
+              propertyPills.forEach(p => {
+                  p.classList.remove('active');
+                  p.style.transform = 'translateZ(20px)';
+              });
+
+              // Add active class to clicked pill with animation
+              pill.classList.add('active');
+              pill.style.transform = 'translateY(-5px) translateZ(40px) scale(1.05)';
+
+              // Add 3D animation to search box
+              searchBox.style.transform = 'translateY(-15px) translateZ(70px) rotateX(15deg)';
+              setTimeout(() => {
+                  searchBox.style.transform = 'translateY(0) translateZ(50px) rotateX(8deg)';
+              }, 600);
+          });
+      });
+</script>
+{% endblock %}

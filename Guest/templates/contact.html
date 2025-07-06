@@ -1,0 +1,397 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block style %}
+  <style>
+    .contact-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      padding-top: 120px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 50px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    .contact-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .contact-header p {
+      color: #666;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .contact-form {
+      flex: 1 1 600px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: fadeInLeft 0.8s 0.3s forwards;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #4e6bff;
+      box-shadow: 0 0 0 2px rgba(78, 107, 255, 0.2);
+      outline: none;
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .contact-btn {
+      background: #4e6bff;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .contact-btn:hover {
+      background: #3a56e8;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(78, 107, 255, 0.4);
+    }
+
+    .contact-info {
+      flex: 1 1 300px;
+      opacity: 0;
+      transform: translateX(20px);
+      animation: fadeInRight 0.8s 0.5s forwards;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      background: #fff;
+    }
+
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      background: #ebf0ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      color: #4e6bff;
+    }
+
+    .info-content h3 {
+      margin: 0 0 5px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .info-content p {
+      margin: 0;
+      color: #666;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Input label animation */
+    .input-animation {
+      position: relative;
+    }
+
+    .input-animation label {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      color: #999;
+    }
+
+    .input-animation input:focus ~ label,
+    .input-animation input:not(:placeholder-shown) ~ label,
+    .input-animation textarea:focus ~ label,
+    .input-animation textarea:not(:placeholder-shown) ~ label {
+      top: -10px;
+      left: 10px;
+      font-size: 0.8rem;
+      background: white;
+      padding: 0 5px;
+      color: #4e6bff;
+    }
+
+    @media (max-width: 768px) {
+      .contact-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+<div class="contact-container">
+  <!-- Message alert -->
+  {%if msg%}
+  <div class="alert alert-success">
+    {{msg}}
+  </div>
+  {%endif%}
+  
+  <!-- Contact header -->
+  <div class="contact-header">
+    <h1>Contact Us</h1>
+    <p>Have questions or need assistance? We're here to help. Fill out the form below, and our team will get back to you shortly.</p>
+  </div>
+  
+  <div class="contact-content">
+    <!-- Contact form -->
+    <div class="contact-form">
+      <form method="post" id="contactForm">
+        {% csrf_token %}
+        
+        <div class="form-group input-animation">
+          <input type="text" class="form-control" id="subject" name="subject" placeholder=" " required>
+          <label for="subject">Subject</label>
+        </div>
+        
+        <div class="form-group input-animation">
+          <input type="email" class="form-control" id="email" name="email" placeholder=" " required>
+          <label for="email">Email</label>
+        </div>
+        
+        <div class="form-group input-animation">
+          <textarea class="form-control" id="message" name="message" placeholder=" " required></textarea>
+          <label for="message">Message</label>
+        </div>
+        
+        <button type="submit" class="contact-btn" id="submitBtn">
+          Send Message
+          <span class="btn-icon">→</span>
+        </button>
+      </form>
+    </div>
+    
+    <!-- Contact information -->
+    <div class="contact-info">
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="info-content">
+          <h3>Email</h3>
+          <p>contact@roomrental.com.np</p>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="info-content">
+          <h3>Location</h3>
+          <p>Golfutar-Kathmandu, Nepal</p>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-icon">
+          <i class="fas fa-phone-alt"></i>
+        </div>
+        <div class="info-content">
+          <h3>Phone</h3>
+          <p>+977 9866137416</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Form animation and validation
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Initial animations
+    setTimeout(() => {
+      document.querySelectorAll('.info-card').forEach((card, index) => {
+        card.style.animation = `fadeInRight 0.5s ${0.3 + (index * 0.2)}s forwards`;
+      });
+    }, 500);
+    
+    // Form submission animation
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        const formInputs = document.querySelectorAll('.form-control');
+        let isValid = true;
+        
+        formInputs.forEach(input => {
+          if (!input.value.trim()) {
+            isValid = false;
+            input.classList.add('invalid');
+            
+            // Shake animation for invalid fields
+            input.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+              input.style.animation = '';
+            }, 500);
+          } else {
+            input.classList.remove('invalid');
+          }
+        });
+        
+        if (isValid) {
+          // Button animation
+          submitBtn.innerHTML = 'Sending...';
+          submitBtn.style.width = submitBtn.offsetWidth + 'px';
+          submitBtn.disabled = true;
+          
+          // Continue with form submission
+          // The form will be processed by Django backend
+        } else {
+          e.preventDefault();
+        }
+      });
+    }
+    
+    // Input focus effects
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.classList.add('focused');
+      });
+      
+      input.addEventListener('blur', () => {
+        input.parentElement.classList.remove('focused');
+      });
+    });
+    
+    // Add hover effects for info cards
+    const infoCards = document.querySelectorAll('.info-card');
+    infoCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+    });
+    
+    // Add keyframe animation for shake effect
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+  });
+</script>
+{% endblock %}

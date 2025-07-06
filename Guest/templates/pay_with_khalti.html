@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="payment-wrapper">
+    {% csrf_token %}
+    
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <!-- Main Payment Container -->
+    <div class="payment-container">
+        <div class="payment-card">
+            <!-- Payment Header -->
+            <div class="payment-header">
+                <div class="khalti-logo">
+                    <svg width="120" height="40" viewBox="0 0 120 40">
+                        <text x="10" y="25" fill="#5C2D91" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Khalti</text>
+                        <circle cx="100" cy="20" r="8" fill="#5C2D91" class="pulse-dot"></circle>
+                    </svg>
+                </div>
+                <h2 class="payment-title">Payment</h2>
+            </div>
+
+
+
+            <!-- Payment Form -->
+            <form method="POST" action="{% url "initiate" %}" class="payment-form" id="khalti-payment-form">
+                {% csrf_token %}
+                
+                {% if house_id %}
+                    <input type="hidden" name="house_id" value="{{ house_id }}">
+                {% elif room_id %}
+                    <input type="hidden" name="room_id" value="{{ room_id }}">
+                {% endif %}
+
+                <!-- Khalti Payment Button -->
+                <button type="submit" id="payment-button" class="khalti-btn">
+                    <span class="btn-text">Pay with Khalti</span>
+                    <div class="btn-loader"></div>
+                    <div class="btn-success">✓</div>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.animated-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.floating-shapes {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 120px;
+    height: 120px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape-3 {
+    width: 60px;
+    height: 60px;
+    top: 80%;
+    left: 80%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.payment-container {
+    position: relative;
+    z-index: 2;
+    max-width: 400px;
+    width: 100%;
+}
+
+.payment-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.8s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.payment-header {
+    margin-bottom: 30px;
+}
+
+.khalti-logo svg {
+    animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    from { filter: drop-shadow(0 0 5px rgba(92, 45, 145, 0.3)); }
+    to { filter: drop-shadow(0 0 15px rgba(92, 45, 145, 0.6)); }
+}
+
+.pulse-dot {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.payment-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 15px 0 0 0;
+}
+
+.amount-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    animation: amountGlow 4s ease-in-out infinite;
+}
+
+@keyframes amountGlow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.amount-display {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.currency {
+    font-size: 24px;
+    color: #666;
+    margin-right: 5px;
+}
+
+.khalti-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #5C2D91 0%, #7B3F98 100%);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.khalti-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.khalti-btn:hover::before {
+    left: 100%;
+}
+
+.khalti-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(92, 45, 145, 0.4);
+    background: linear-gradient(135deg, #6A3093 0%, #8B4F9E 100%);
+}
+
+.khalti-btn:active {
+    transform: translateY(0);
+}
+
+.btn-loader {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid transparent;
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-success {
+    display: none;
+    font-size: 24px;
+    animation: successPop 0.5s ease-out;
+}
+
+@keyframes successPop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+/* Button states */
+.khalti-btn.loading .btn-text {
+    display: none;
+}
+
+.khalti-btn.loading .btn-loader {
+    display: block;
+}
+
+.khalti-btn.success .btn-text,
+.khalti-btn.success .btn-loader {
+    display: none;
+}
+
+.khalti-btn.success .btn-success {
+    display: block;
+}
+
+.khalti-btn.success {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .payment-card {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+    
+    .amount-display {
+        font-size: 28px;
+    }
+    
+    .khalti-btn {
+        padding: 16px;
+        font-size: 16px;
+    }
+}
+
+/* Ripple effect */
+.khalti-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.khalti-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.khalti-btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentButton = document.getElementById('payment-button');
+    const form = document.getElementById('khalti-payment-form');
+    
+    // Payment button click handler
+    paymentButton.addEventListener('click', function() {
+        // Add loading state
+        paymentButton.classList.add('loading');
+        
+        // Simulate payment processing (replace with actual Khalti integration)
+        setTimeout(() => {
+            paymentButton.classList.remove('loading');
+            paymentButton.classList.add('success');
+            
+            // Reset after success animation and submit form
+            setTimeout(() => {
+                // Here you would typically submit the form or redirect
+                // form.submit(); // Uncomment for actual form submission
+                console.log('Payment successful - form would be submitted here');
+                
+                // Reset button state for demo
+                paymentButton.classList.remove('success');
+            }, 2000);
+        }, 2000);
+    });
+});
+
+// Khalti Payment Integration (Replace with actual Khalti SDK)
+function initializeKhalti() {
+    // Initialize actual Khalti payment here
+    // const khalti = new Khalti({
+    //     publicKey: 'your-public-key',
+    //     productIdentity: 'booking-payment',
+    //     productName: 'Booking Payment',
+    //     onSuccess: function(payload) {
+    //         console.log(payload);
+    //         // Handle success and submit form
+    //         document.getElementById('khalti-payment-form').submit();
+    //     },
+    //     onError: function(error) {
+    //         console.log(error);
+    //         // Handle error
+    //     }
+    // });
+}
+</script>
+{% endblock %}

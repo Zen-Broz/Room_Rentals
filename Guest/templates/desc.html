@@ -1,0 +1,710 @@
+
+{%extends 'base.html' %}
+{%load static%}
+{%block body%}
+
+<style>
+    .room-detail-container .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(30px);
+        opacity: 0;
+        animation: slideInCard 1s ease-out 0.3s both;
+    }
+
+    .room-detail-container {
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+    
+    .room-detail-container *,
+    .room-detail-container *::before,
+    .room-detail-container *::after {
+        box-sizing: border-box;
+    }
+
+    .room-detail-container .floating-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .room-detail-container .particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .room-detail-container .main-container {
+        margin-top: 2%;
+        margin-left: 5%;
+        margin-right: 5%;
+        margin-bottom: 2%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(30px);
+        opacity: 0;
+        animation: slideInCard 1s ease-out 0.3s both;
+    }
+
+    @keyframes slideInCard {
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 30px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+        animation: expandLine 1s ease-out 1s both;
+    }
+
+    @keyframes expandLine {
+        from { width: 0; }
+        to { width: 60px; }
+    }
+
+    .property-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 50px;
+        align-items: start;
+    }
+
+    .image-container {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        transform: perspective(1000px) rotateY(-5deg);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+
+    .image-container:hover {
+        transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    }
+
+    .property-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .image-container:hover .property-image {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .image-container:hover .image-overlay {
+        opacity: 1;
+    }
+
+    .property-info {
+        padding: 20px 0;
+    }
+
+    .price-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        animation: bounceIn 1s ease-out 0.8s both;
+    }
+
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .property-type {
+        font-size: 1.3rem;
+        color: #4a5568;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+
+    .property-description {
+        font-size: 1.1rem;
+        color: #2d3748;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    .property-location {
+        color: #667eea;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .booking-status {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .status-available {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    }
+
+    .status-booked {
+        background: linear-gradient(135deg, #f56565, #e53e3e);
+        color: white;
+        box-shadow: 0 8px 25px rgba(245, 101, 101, 0.3);
+    }
+
+    .author-section {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        padding: 25px;
+        border-radius: 20px;
+        margin-top: 20px;
+    }
+
+    .author-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 15px;
+    }
+
+    .author-info {
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .author-info p {
+        margin-bottom: 8px;
+    }
+
+    .post-date {
+        color: #667eea;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .report-link {
+        color: #e53e3e;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .report-link:hover {
+        color: #c53030;
+        text-decoration: underline;
+    }
+
+    .details-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 50px;
+    }
+
+    .details-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: translateY(30px);
+        opacity: 0;
+        animation: slideInCard 1s ease-out 1.2s both;
+    }
+
+    .details-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .details-title::before {
+        content: '🏠';
+        margin-right: 12px;
+        font-size: 1.5rem;
+    }
+
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .details-table tr {
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background-color 0.3s ease;
+    }
+
+    .details-table tr:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+    }
+
+    .details-table td {
+        padding: 15px 10px;
+        font-size: 1rem;
+    }
+
+    .details-table td:first-child {
+        font-weight: 600;
+        color: #4a5568;
+        width: 40%;
+    }
+
+    .details-table td:nth-child(2) {
+        color: #2d3748;
+        width: 35%;
+    }
+
+    .details-table td:nth-child(3) {
+        font-weight: 600;
+        color: #4a5568;
+        width: 25%;
+    }
+
+    .details-table td:last-child {
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .author-card {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .author-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+        opacity: 0;
+    }
+
+    .author-card:hover::before {
+        animation: shimmer 1.5s ease-in-out;
+    }
+
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+            opacity: 0;
+        }
+    }
+
+    .author-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .book-now-btn {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .book-now-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
+    }
+
+    .book-now-btn:active {
+        transform: translateY(-1px);
+    }
+
+    .book-now-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .book-now-btn:hover::before {
+        left: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .main-container {
+            margin: 20px;
+        }
+        
+        .property-hero,
+        .details-section {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .glass-card {
+            padding: 25px;
+        }
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.2s; }
+    .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<!-- Create floating particles -->
+<div class="floating-particles" id="particles"></div>
+
+<div class="main-container">
+    <div class="glass-card">
+        <h2 class="section-title">Property Details</h2>
+        
+        <div class="property-hero">
+            <div class="image-container">
+                <img src="{% if val.img %}{{val.img.url}}{% else %}data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ENo Image Available%3C/svg%3E{% endif %}" 
+                     alt="Property Image" 
+                     class="property-image">
+                <div class="image-overlay"></div>
+            </div>
+            
+            <div class="property-info">
+                <div class="price-tag fade-in">
+                    NPR {{val.cost}}/-
+                </div>
+                
+                <div class="fade-in">
+                    {%if type == 'Apartment'%}
+                    <p class="property-type">{{val.dimention}} ft. Apartment</p>
+                    {%else%}
+                    <p class="property-type">{{val.area}} sqr ft. House</p>
+                    {%endif%}
+                </div>
+                
+                <div class="fade-in">
+                    <p class="property-description">{{val.desc}}</p>
+                </div>
+                
+                <div class="fade-in">
+                    <p class="property-location">📍 {{val.district}}, {{val.city}}, {{val.state}}</p>
+                </div>
+                
+                <div class="fade-in">
+                    <div class="booking-status {% if val.booked %}status-booked{% else %}status-available{% endif %}">
+                        {% if val.booked %}🔒 Booked{% else %}✅ Available{% endif %}
+                    </div>
+                </div>
+                
+                <div class="author-section fade-in">
+                    <h5 class="author-title">Posted by</h5>
+                    <div class="author-info">
+                        <p><strong>{{user.name}}</strong></p>
+                        <p>{{user.district}}, {{user.city}}, {{user.state}}</p>
+                        <p class="post-date">Posted on {{val.date}}</p>
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <a href="/contact" class="report-link">⚠️ Report this ad</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <div class="details-card">
+                <h3 class="details-title">Property Details</h3>
+                <table class="details-table">
+                    <tr>
+                        <td>Type:</td>
+                        <td>{{type}}</td>
+                        <td>Cost:</td>
+                        <td>NPR {{val.cost}}/-</td>
+                    </tr>
+                    {%if type == 'House'%}
+                    <tr>
+                        <td>Area:</td>
+                        <td>{{val.area}} sq ft.</td>
+                        <td>Floors:</td>
+                        <td>{{val.floor}}</td>
+                    </tr>
+                    {%endif%}
+                    <tr>
+                        <td>Bedrooms:</td>
+                        <td>{{val.bedrooms}}</td>
+                        <td>Kitchen:</td>
+                        <td>{{val.kitchen}}</td>
+                    </tr>
+                    <tr>
+                        <td>Hall:</td>
+                        <td>{{val.hall}}</td>
+                        <td>Balcony:</td>
+                        <td>{{val.balcany}}</td>
+                    </tr>
+                    <tr>
+                        <td>AC:</td>
+                        <td>{{val.AC}}</td>
+                        <td>Date posted:</td>
+                        <td>{{val.date}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="details-card">
+                <div class="author-card">
+                    <div class="author-avatar">
+                        {{user.name|first|upper}}
+                    </div>
+                    <h3 class="details-title" style="margin-bottom: 15px;">👤 Contact Info</h3>
+                    <div class="author-info">
+                        <p><strong>{{user.name}}</strong></p>
+                        <p>📍 {{user.district}}, {{user.city}}, {{user.state}}</p>
+                        <p>📧 {{user.email}}</p>
+                        <p>📞 {{user.number}}</p>
+                    </div>
+                    
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% if type == 'House' %}{% url 'book_house' %}{% elif type == 'Apartment'  %}{% url 'book_room' %}{% endif %}">
+                        {% csrf_token %}
+                        {% if val.house_id %}
+                        <input type="hidden" name="house_id" value="{{ val.house_id }}">
+                        {% endif %}
+                        {% if val.room_id %}
+                        <input type="hidden" name="room_id" value="{{ val.room_id }}">
+                        {% endif %}
+                        <button type="submit" class="book-now-btn">
+                            🏠 Book Now
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Create animated particles
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, observerOptions);
+
+    // 3D tilt effect for cards
+    function addTiltEffect() {
+        const cards = document.querySelectorAll('.details-card, .glass-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+    }
+
+    // Smooth scroll reveal
+    function animateOnScroll() {
+        const elements = document.querySelectorAll('.fade-in');
+        elements.forEach((el, index) => {
+            observer.observe(el);
+        });
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+        createParticles();
+        addTiltEffect();
+        animateOnScroll();
+        
+        // Add loading animation
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            document.body.style.transition = 'opacity 0.5s ease';
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+
+    // Smooth scrolling for better UX
+    document.documentElement.style.scrollBehavior = 'smooth';
+</script>
+
+{% endblock %}
